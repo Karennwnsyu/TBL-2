@@ -13,11 +13,12 @@ module tb_basic;
     logic uart_rxd;
     logic uart_txd;
 
+    // Vivado: set simulation run dir to project root (where `make` writes clock.mem)
     picorv32_soc_ref #(
         .CLK_HZ            (CLK_HZ),
         .UART_BAUD         (UART_BAUD),
         .TIMER_TICK_CYCLES (TIMER_TICK_CYCLES),
-        .IMEM_HEX          ("../firmware/clock.mem")
+        .IMEM_HEX          ("clock.mem")
     ) uut (
         .clk        (clk),
         .resetn     (resetn),

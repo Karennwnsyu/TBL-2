@@ -7,7 +7,9 @@ module picorv32_soc_ref #(
     parameter string       IMEM_HEX          = "clock.mem",
     parameter logic [31:0] DMEM_BASE_ADDR    = 32'h0001_0000,
     parameter int unsigned DMEM_BYTES        = 8192,
-    parameter int unsigned IMEM_WORDS        = 4096
+    parameter int unsigned IMEM_WORDS        = 4096,
+    parameter logic [31:0] UART_BASE       = 32'h4000_0000,
+    parameter logic [31:0] TIMER_BASE      = 32'h4000_0010
 ) (
     input  logic        clk,
     input  logic        resetn,
@@ -15,8 +17,10 @@ module picorv32_soc_ref #(
     output logic        uart_txd
 );
 
-    localparam logic [31:0] STACKADDR  = DMEM_BASE_ADDR + DMEM_BYTES;
-    localparam logic [31:0] IMEM_BYTES = IMEM_WORDS * 4;
+    localparam logic [31:0] STACKADDR   = DMEM_BASE_ADDR + DMEM_BYTES;
+    localparam logic [31:0] IMEM_BYTES  = IMEM_WORDS * 4;
+    localparam logic [31:0] UART_BYTES  = 32'd16;
+    localparam logic [31:0] TIMER_BYTES = 32'd16;
 
     logic        trap;
     logic        mem_valid;
@@ -31,13 +35,27 @@ module picorv32_soc_ref #(
     logic [31:0] dmem_rdata;
     logic        imem_ready;
     logic        dmem_ready;
-    logic        invalid_ready;
+
+    logic [31:0] uart_rdata;
+    logic        uart_ready;
+    logic [31:0] timer_rdata;
+    logic        timer_ready;
 
     logic        mem_we;
     logic        imem_hit;
+    logic        dmem_hit;
+    logic        uart_hit;
+    logic        timer_hit;
+    logic        invalid_ready;
 
     assign mem_we   = |mem_wstrb;
     assign imem_hit = (mem_addr < IMEM_BYTES) && !mem_we;
+    assign dmem_hit = (mem_addr >= DMEM_BASE_ADDR) &&
+                      (mem_addr < (DMEM_BASE_ADDR + DMEM_BYTES));
+    assign uart_hit = (mem_addr >= UART_BASE) &&
+                      (mem_addr < (UART_BASE + UART_BYTES));
+    assign timer_hit = (mem_addr >= TIMER_BASE) &&
+                       (mem_addr < (TIMER_BASE + TIMER_BYTES));
 
     picorv32 #(
         .ENABLE_COUNTERS    (1'b0),
@@ -102,50 +120,47 @@ module picorv32_soc_ref #(
         .ready (dmem_ready)
     );
 
-//The following code is just for reference and is not part of the actual implementation. You can modify it as needed to fit your design.
-/*
     uart #(
         .CLK_HZ (CLK_HZ),
         .BAUD   (UART_BAUD)
     ) u_uart (
-        .clk          (clk),
-        .rst          (!resetn),
-        .bus_valid    (mem_valid),
-        .bus_we       (mem_we),
-        .bus_addr     (mem_addr),
-        .bus_wdata    (mem_wdata),
-        .bus_rdata    (uart_rdata),
-        .bus_ready    (uart_ready),
-        .rx           (uart_rxd),
-        .tx           (uart_txd)
+        .clk       (clk),
+        .rst       (!resetn),
+        .bus_valid (mem_valid && uart_hit),
+        .bus_we    (mem_we),
+        .bus_addr  (mem_addr),
+        .bus_wdata (mem_wdata),
+        .bus_rdata (uart_rdata),
+        .bus_ready (uart_ready),
+        .rx        (uart_rxd),
+        .tx        (uart_txd)
     );
 
     timer #(
-        .DEFAULT_PERIOD_CYCLES (TIMER_TICK_CYCLES)
+        .DEFAULT_PERIOD_CYCLES (TIMER_TICK_CYCLES),
+        .BASE_ADDR             (TIMER_BASE)
     ) u_timer (
-        .clk              (clk),
-        .rst              (!resetn),
-        .bus_valid        (mem_valid),
-        .bus_we           (mem_we),
-        .bus_addr         (mem_addr),
-        .bus_wdata        (mem_wdata),
-        .bus_rdata        (timer_rdata),
-        .bus_ready        (timer_ready)
+        .clk       (clk),
+        .rst       (!resetn),
+        .bus_valid (mem_valid && timer_hit),
+        .bus_we    (mem_we),
+        .bus_addr  (mem_addr),
+        .bus_wdata (mem_wdata),
+        .bus_rdata (timer_rdata),
+        .bus_ready (timer_ready)
     );
-*/
-//Basic bus interconnect
-    assign imem_ready    = mem_valid && imem_hit;
-    //assign invalid_ready = mem_valid && !(imem_ready || dmem_ready || uart_ready || timer_ready);
-    assign invalid_ready = mem_valid && !(imem_ready || dmem_ready );
 
-    //assign mem_ready = imem_ready | dmem_ready | uart_ready | timer_ready | invalid_ready;
-    assign mem_ready = imem_ready | dmem_ready | invalid_ready;
-    assign mem_rdata = imem_ready  ? imem_rdata :
-                       dmem_ready  ? dmem_rdata :
-    //                   uart_ready  ? uart_rdata :
-    //                   timer_ready ? timer_rdata :
+    assign imem_ready = mem_valid && imem_hit;
+    assign invalid_ready = mem_valid &&
+        !(imem_hit || dmem_hit || uart_hit || timer_hit);
+
+    assign mem_ready = imem_ready | dmem_ready | uart_ready | timer_ready |
+        invalid_ready;
+
+    assign mem_rdata = imem_ready  ? imem_rdata  :
+                       dmem_ready  ? dmem_rdata  :
+                       uart_ready  ? uart_rdata  :
+                       timer_ready ? timer_rdata :
                        32'd0;
-
-
 
 endmodule

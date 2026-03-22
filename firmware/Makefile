@@ -26,7 +26,8 @@ CC       := clang
 OBJCOPY  := llvm-objcopy
 OBJDUMP  := llvm-objdump
 CFLAGS   := --target=riscv32-unknown-elf $(COMMON_CFLAGS)
-LDFLAGS  := --target=riscv32-unknown-elf -fuse-ld=lld $(COMMON_LDFLAGS)
+# Add -fuse-ld=lld manually if your clang links RISC-V with lld (optional).
+LDFLAGS  := --target=riscv32-unknown-elf $(COMMON_LDFLAGS)
 else
 $(error No suitable RISC-V toolchain found. Install riscv32-unknown-elf-gcc, riscv64-unknown-elf-gcc, or clang/LLVM with riscv32 support.)
 endif
