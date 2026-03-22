@@ -1,0 +1,9 @@
+# AI Usage Log
+
+1. Asked AI to clarify the specific memory-mapped I/O (MMIO) register address offsets from the TBL handout.
+2. Encountered a potential edge-case bug in the UART state machine during simulation; used AI to review the code and suggest a fix for the `tx_ready` flag timing logic.
+3. Queried AI on whether it's possible to run Vivado `xsim` and synthesis processes purely from the Windows Terminal to accelerate our group's workflow.
+4. Used AI to quickly cross-check our `clock.c` firmware logic regarding the 24-hour rollover edge case.
+5. Posed a debugging question to AI when the simulation output showed misaligned ASCII text; AI suggested verifying whether the testbench's baud rate division parameters correctly matched the SoC's localparams.
+
+All AI suggestions were manually reviewed, audited, and integrated into the final codebase by the team.
