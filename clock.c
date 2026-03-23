@@ -56,10 +56,10 @@ static void draw_console_layout(void) {
 
 // --- 主循环 ---
 int main(void) {
-    uint8_t hours = 12;   // 按照 Example 设个初始时间比较好看
-    uint8_t minutes = 34;
-    uint8_t seconds = 56;
-    uint8_t blink_flag = 1; // 用于控制冒号闪烁
+    uint8_t hours = 0;   
+    uint8_t minutes = 57;
+    uint8_t seconds = 0;
+    uint8_t blink_flag = 1;
 
     // 1. 系统启动时绘制静态 UI
     draw_console_layout();
