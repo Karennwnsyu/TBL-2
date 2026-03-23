@@ -57,7 +57,7 @@ Synthesis top is `pynq_z2_tx_demo_top.sv`, which generates a 62.5 MHz SoC clock 
 ---
 
 ## Division of labor
-* **Architecture & SoC integration:** Defined the MMIO memory map, integrated the UART RX path, and wired peripherals to the RISC-V `picorv32_soc_ref` system.
-* **RTL:** Implemented hardware for `uart.sv` (TX+RX), `timer.sv`, and adjusted top-level parameters.
-* **Firmware & verification:** Wrote `clock.c` with VT100 UI and time-setting logic, managed the build flow, and verified behavior in `tb_basic.sv`.
-* [cite_start]**Documentation:** Prepared `README.md`, `report.pdf` (this document), and maintained the required `ai_log.txt` [cite: 446-448].
+* **Architecture & SoC integration:** (HE Siyu, WANG Xinan) Defined the MMIO memory map, integrated the UART RX path, and wired peripherals to the RISC-V `picorv32_soc_ref` system.
+* **RTL:** (HE Siyu, ZHAO Xingquan) Implemented hardware for `uart.sv` (TX+RX), `timer.sv`, and adjusted top-level parameters.
+* **Firmware & verification:** (HE Siyu, TANG Xiwei) Wrote `clock.c` with VT100 UI and time-setting logic, managed the build flow, and verified behavior in `tb_basic.sv`.
+* [cite_start]**Documentation:** (WANG Xinan, LIU Yutong, PAN Yang) Prepared `README.md`, `report.pdf` (this document), and maintained the required `ai_log.txt` [cite: 446-448].
