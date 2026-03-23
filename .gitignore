@@ -1,0 +1,12 @@
+# Firmware build
+firmware/build/
+firmware/*.map
+
+# Generated images (rebuild with: cd firmware && make)
+clock.mem
+clock*.mem
+
+# OS / editor
+.DS_Store
+*.swp
+*.vcd

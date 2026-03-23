@@ -9,7 +9,6 @@
 
 #define TIMER_BASE    0x40000010u
 #define TIMER_STATUS  REG32(TIMER_BASE + 0x00u)
-#define TIMER_VALUE   REG32(TIMER_BASE + 0x04u)
 #define TIMER_TICK    0x00000001u
 
 static void uart_putc(char c) {
@@ -31,26 +30,47 @@ static void timer_clear_tick(void) {
     TIMER_STATUS = TIMER_TICK;
 }
 
-// 0..99 -> two digits, no compiler div/mod helpers (freestanding -nostdlib)
-static void uart_put2digits(unsigned v) {
-    unsigned tens = 0;
-    unsigned u    = v;
-    while (u >= 10u) {
-        u -= 10u;
-        tens++;
-    }
-    uart_putc((char)('0' + tens));
-    uart_putc((char)('0' + u));
+static const char HOUR_PAIR[] =
+    "000102030405060708091011121314151617181920212223";
+static const char MS_PAIR[] =
+    "000102030405060708091011121314151617181920212223242526272829"
+    "303132333435363738394041424344454647484950515253545556575859";
+
+static const char SPIN[] = "|/-\\";
+
+static void uart_put_hh(unsigned h) {
+    unsigned i = h << 1;
+    uart_putc(HOUR_PAIR[i]);
+    uart_putc(HOUR_PAIR[i + 1u]);
 }
 
-static void print_time(int h, int m, int s) {
-    uart_puts("MISSION CLOCK ");
-    uart_put2digits((unsigned)h);
+static void uart_put_pair(unsigned v) {
+    unsigned i = v << 1;
+    uart_putc(MS_PAIR[i]);
+    uart_putc(MS_PAIR[i + 1u]);
+}
+
+// Row 3: in-place time (cyan); EL clears any longer previous line.
+static void ui_time_line(int h, int m, int s) {
+    uart_puts("\033[3;1H\033[1;36m");
+    uart_put_hh((unsigned)h);
     uart_putc(':');
-    uart_put2digits((unsigned)m);
+    uart_put_pair((unsigned)m);
     uart_putc(':');
-    uart_put2digits((unsigned)s);
-    uart_puts("\r");
+    uart_put_pair((unsigned)s);
+    uart_puts("\033[0m\033[K");
+}
+
+// Row 4: status (yellow) + spinner index via (sec & 3), no div/mod.
+static void ui_status_line(unsigned sec) {
+    uart_puts("\033[4;1H\033[1;33mSTATUS: RUNNING\033[0m ");
+    uart_putc(SPIN[sec & 3u]);
+    uart_puts(" \033[K");
+}
+
+static void ui_init(void) {
+    uart_puts("\033[2J\033[H");
+    uart_puts("\033[1;32mRISC-V MISSION CLOCK\033[0m\r\n\r\n");
 }
 
 int main(void) {
@@ -58,8 +78,9 @@ int main(void) {
     int minutes = 0;
     int seconds = 0;
 
-    uart_puts("\033[2J\033[H");
-    print_time(hours, minutes, seconds);
+    ui_init();
+    ui_time_line(hours, minutes, seconds);
+    ui_status_line((unsigned)seconds);
 
     while (1) {
         if (timer_tick_pending()) {
@@ -77,7 +98,8 @@ int main(void) {
                 }
             }
 
-            print_time(hours, minutes, seconds);
+            ui_time_line(hours, minutes, seconds);
+            ui_status_line((unsigned)seconds);
         }
     }
 }

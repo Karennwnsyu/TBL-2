@@ -36,7 +36,7 @@ ELF      := $(BUILD_DIR)/$(OUT_BASENAME).elf
 BIN      := $(BUILD_DIR)/$(OUT_BASENAME).bin
 ASM      := $(BUILD_DIR)/$(OUT_BASENAME).lst
 
-.PHONY: all clean smoke minroll hourroll dayroll
+.PHONY: all clean
 
 all: $(MEM_OUT)
 
