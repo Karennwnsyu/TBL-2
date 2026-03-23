@@ -8,6 +8,19 @@ Instruction memory is initialized from **`clock.mem`** (compiled firmware). Data
 
 ---
 
+## Division of Labor
+
+| Role | Member Name | Key Responsibilities |
+| :--- | :--- | :--- |
+| **Team Leader** | `WANG Xinan SID: 5852` | [cite_start]Coordinates work distribution, ensures on-time integration, and manages the final submission [cite: 171-174]. |
+| **SoC Engineer** | `<Name here>` | [cite_start]Integrates peripherals into the RISC-V system, defines the memory map, and manages bus interconnects [cite: 179-181]. |
+| **Peripheral Engineer** | `<Name here>` | [cite_start]Implements the hardware RTL (SystemVerilog) for UART (`uart.sv`) and Timer (`timer.sv`) [cite: 182-183]. |
+| **Firmware Engineer** | `<Name here>` | [cite_start]Develops the bare-metal C program (`clock.c`) for time updates, polling, and rollover logic [cite: 184-186]. |
+| **Verification Engineer** | `<Name here>` | [cite_start]Develops `tb_basic.sv`, runs Vivado xsim simulations, and debugs waveform behavior [cite: 187-190]. |
+| **AI Engineer** | `<Name here>` | [cite_start]Uses AI tools for development acceleration, audits AI-generated code, and maintains `ai_log.txt` [cite: 191-193]. |
+
+---
+
 ## Repository layout
 
 | Path | Role |
@@ -97,15 +110,6 @@ Use a **3.3 V** USB–UART adapter and a **common ground**:
 ## Firmware terminal UI (bonus)
 
 The firmware uses **ANSI escape sequences** (colors and cursor positioning) for a small TUI: **clear screen once**, a green **“RISC-V MISSION CLOCK”** title, **cyan** time on a fixed row, **yellow** **STATUS: RUNNING**, and a **`|/-\` spinner** tied to the second count (bitwise index). Updates **rewrite fixed lines** instead of scrolling endless lines. If your terminal does not interpret ANSI, you may still see readable text with extra escape characters.
-
----
-
-## Division of labor
-
-- **Team lead** — integration, MMIO plan, milestones  
-- **SoC / RTL** — `uart.sv`, `timer.sv`, `picorv32_soc_ref.sv` bus integration  
-- **Firmware / verification** — `clock.c`, `tb_basic.sv`, `Makefile`, tool flow  
-- **AI assistance** — boilerplate and bring-up edits (document in `ai_log.txt` per course rules)
 
 ---
 
