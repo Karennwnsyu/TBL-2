@@ -48,7 +48,7 @@ Address decoding and `bus_valid` gating are implemented in **`picorv32_soc_ref.s
 
 ## Firmware build
 
-**Vivado does not build the firmware.** You need a **RISC-V bare-metal toolchain** (e.g. `riscv32-unknown-elf-gcc` or `riscv64-unknown-elf-gcc`, or **clang with a working RISC-V triple and linker**). If you only have a prebuilt **`clock.mem`**, you can skip compilation and point simulation/synthesis at that file.
+Vivado handles hardware synthesis only and **does not compile RISC-V firmware**. A **RISC-V bare-metal toolchain** (e.g. `riscv32-unknown-elf-gcc` or `riscv64-unknown-elf-gcc`, or **clang with a working RISC-V triple and linker**) is required to generate the executable. If a prebuilt **`clock.mem`** is already present, the compilation stage can be bypassed by referencing this file directly in the simulation or synthesis flow.
 
 1. `cd firmware`
 2. `make` or **`make all`** (default target builds the memory image)
@@ -122,16 +122,19 @@ The firmware uses **ANSI escape sequences** (colors and cursor positioning) for 
 
 ## Advanced Features (Bonus)
 
-Our team has successfully implemented the following advanced bonus features, going beyond the baseline requirements to enhance the mission clock's functionality and operator experience:
+The following advanced bonus features have been successfully implemented, which goes beyond the baseline requirements to enhance the mission clock's functionality and operator experience:
 
 * **ANSI Terminal Escape Sequences (Colored TUI & In-place Refresh):**
-    The firmware utilizes ANSI escape codes to render a colored Text User Interface (TUI). This includes clearing the screen on boot, displaying a green **“RISC-V MISSION CLOCK”** title, outputting the time in **cyan** on a fixed row (in-place refresh rather than endless scrolling), and a dynamic `|/-\` spinner to indicate active polling.
+The firmware utilizes ANSI escape codes to render a colored Text User Interface (TUI). This includes clearing the screen on boot, displaying a green **“RISC-V MISSION CLOCK”** title, outputting the time in **cyan** on a fixed row (in-place refresh rather than endless scrolling), and a dynamic `|/-\` spinner to indicate active polling.
+
 * **UART Command to Set the Time:**
-    We extended the UART peripheral and firmware to support RX (receive) polling. The operator can dynamically set or adjust the clock time during runtime by sending specific keystrokes or commands via the serial terminal, without needing to reset the SoC.
+We extended the UART peripheral and firmware to support RX (receive) polling. The operator can dynamically set or adjust the clock time during runtime by sending specific keystrokes or commands via the serial terminal, without needing to reset the SoC.
+
 * **Countdown Timer Mode (T-Minus):**
-    The system features a toggleable countdown logic. When activated, the clock counts downwards from a specified target time to `00:00:00`, accurately simulating a critical space shuttle launch sequence.
+The system features a toggleable countdown logic. When activated, the clock counts downwards from a specified target time to `00:00:00`, accurately simulating a critical space shuttle launch sequence.
+
 * **Mission Elapsed Time (MET) Display:**
-    In addition to the primary local time, the terminal concurrently tracks and displays the MET (Mission Elapsed Time). This provides a continuous, independent count of the total uptime/flight time since the system was booted or the mission sequence was initiated.
+In addition to the primary local time, the terminal concurrently tracks and displays the MET (Mission Elapsed Time). This provides a continuous, independent count of the total uptime/flight time since the system was booted or the mission sequence was initiated.
 
 ---
 
@@ -143,11 +146,11 @@ Our team has successfully implemented the following advanced bonus features, goi
 
 ## Submission Checklist
 
-* **uart.sv**
-* **timer.sv**
-* **tb_basic.sv**
-* **firmware/** (contains **clock.c**, **linker.ld**, **Makefile**)
-* **clock.mem**
-* **README.md**
-* **report.pdf**
-* **ai_log.txt**
+* uart.sv
+* timer.sv
+* tb_basic.sv
+* firmware/ (contains *clock.c*, *linker.ld*, and *Makefile*)
+* clock.mem
+* README.md
+* report.pdf
+* ai_log.txt
