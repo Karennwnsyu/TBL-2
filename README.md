@@ -1,4 +1,4 @@
-# EE3220 TBL-2 — RISC-V Mission Clock (PicoRV32 SoC)
+# EE3220 TBL-2 Group 10 — RISC-V Mission Clock (PicoRV32 SoC)
 
 ## Overview
 
@@ -12,12 +12,12 @@ Instruction memory is initialized from **`clock.mem`** (compiled firmware). Data
 
 | Role | Member Name | Key Responsibilities |
 | :--- | :--- | :--- |
-| **Team Leader** | `WANG Xinan SID: 5852` | [cite_start]Coordinates work distribution, ensures on-time integration, and manages the final submission [cite: 171-174]. |
-| **SoC Engineer** | `<Name here>` | [cite_start]Integrates peripherals into the RISC-V system, defines the memory map, and manages bus interconnects [cite: 179-181]. |
-| **Peripheral Engineer** | `<Name here>` | [cite_start]Implements the hardware RTL (SystemVerilog) for UART (`uart.sv`) and Timer (`timer.sv`) [cite: 182-183]. |
-| **Firmware Engineer** | `<Name here>` | [cite_start]Develops the bare-metal C program (`clock.c`) for time updates, polling, and rollover logic [cite: 184-186]. |
-| **Verification Engineer** | `<Name here>` | [cite_start]Develops `tb_basic.sv`, runs Vivado xsim simulations, and debugs waveform behavior [cite: 187-190]. |
-| **AI Engineer** | `<Name here>` | [cite_start]Uses AI tools for development acceleration, audits AI-generated code, and maintains `ai_log.txt` [cite: 191-193]. |
+| **Team Leader** | `WANG Xinan SID: 5852` | Coordinates work distribution, ensures on-time integration, and manages the final submission. |
+| **SoC Engineer** | `<Name here>` | Integrates peripherals into the RISC-V system, defines the memory map, and manages bus interconnects. |
+| **Peripheral Engineer** | `<Name here>` | Implements the hardware RTL (SystemVerilog) for UART (`uart.sv`) and Timer (`timer.sv`). |
+| **Firmware Engineer** | `<Name here>` | Develops the bare-metal C program (`clock.c`) for time updates, polling, and rollover logic. |
+| **Verification Engineer** | `<Name here>` | Develops `tb_basic.sv`, runs Vivado xsim simulations, and debugs waveform behavior. |
+| **AI Engineer** | `<Name here>` | Uses AI tools for development acceleration, audits AI-generated code, and maintains `ai_log.txt`. |
 
 ---
 
