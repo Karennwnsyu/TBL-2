@@ -89,7 +89,8 @@ SoC UART parameters in the FPGA top match **115200 baud** at the **post-PLL SoC 
 * 00:59:59   STATUS: RUNNING 
 * 01:00:00   STATUS: RUNNING
 * 01:00:01   STATUS: RUNNING
-* **Our team has implemented an additional feature for the terminal UI. The time will now refresh in place instead of being printed line by line.**
+
+**Our team has implemented an additional feature for the terminal UI. The time will now refresh in place instead of being printed line by line.**
 
 ---
 
