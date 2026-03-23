@@ -146,7 +146,7 @@ Our team has successfully implemented the following advanced bonus features, goi
 * **uart.sv**
 * **timer.sv**
 * **tb_basic.sv**
-* **firmware/** (contains **clock.c**, l**inker.ld**, **Makefile**)
+* **firmware/** (contains **clock.c**, **linker.ld**, **Makefile**)
 * **clock.mem**
 * **README.md**
 * **report.pdf**
