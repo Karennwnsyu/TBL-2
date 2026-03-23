@@ -1,14 +1,12 @@
 `timescale 1ns / 1ps
 
 module timer #(
-    // 系统时钟频率，决定了 1 秒钟需要计数多少次
-    // PYNQ-Z2 常用 50MHz
-    parameter CLK_FREQ = 50_000_000 
+    parameter CLK_HZ = 62_500_000 // 顶层传下来的 62.5MHz
 )(
     input  logic        clk,
     input  logic        rst_n,
 
-    // CPU MMIO 总线接口 (与 UART 模块保持一致)
+    // PicoRV32 MMIO 总线接口
     input  logic        mem_valid,
     output logic        mem_ready,
     input  logic [31:0] mem_addr,
@@ -17,24 +15,17 @@ module timer #(
     output logic [31:0] mem_rdata
 );
 
-    // =========================================================================
-    // 寄存器地址偏移定义
-    // (基地址 0x4000_0010 已经在顶层互联中剥离)
-    // =========================================================================
     localparam ADDR_STATUS = 8'h00;
     localparam ADDR_VALUE  = 8'h04;
 
-    // =========================================================================
-    // 内部寄存器与计数逻辑
-    // =========================================================================
     logic [31:0] sec_counter;
     logic        tick_pending;
 
-    // 1秒钟到达的标志
+    // 当计数值达到 CLK_HZ - 1 时，说明刚好过去了 1 秒钟
     logic tick_event;
-    assign tick_event = (sec_counter == CLK_FREQ - 1);
+    assign tick_event = (sec_counter == CLK_HZ - 1);
 
-    // 计数器逻辑：不断循环计数，达到 1 秒频率时清零
+    // 1秒钟计数器
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             sec_counter <= 32'h0;
@@ -47,9 +38,7 @@ module timer #(
         end
     end
 
-    // =========================================================================
-    // MMIO 总线读写逻辑
-    // =========================================================================
+    // 总线读写控制
     logic is_read;
     logic is_write;
     logic [7:0] offset;
@@ -58,33 +47,32 @@ module timer #(
     assign is_read  = mem_valid && (mem_wstrb == 4'b0000);
     assign is_write = mem_valid && (mem_wstrb != 4'b0000);
 
-    // 简单总线，1个周期内直接准备好响应
+    // 直接响应握手
     assign mem_ready = mem_valid;
 
-    // 状态机处理 tick_pending 标志位
+    // 处理 tick_pending 标志位
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             tick_pending <= 1'b0;
         end else begin
-            // 硬件置位：达到1秒时，硬件自动将 pending 置为 1
+            // 硬件自动置位
             if (tick_event) begin
                 tick_pending <= 1'b1;
             end 
-            // 软件清零 (Write-1-to-Clear)：
-            // 如果 CPU 写入 STATUS 寄存器，并且 bit 0 是 1，则清零
+            // 固件通过向 STATUS[0] 写入 1 来清零 (Write-1-to-Clear)
             else if (is_write && (offset == ADDR_STATUS) && mem_wdata[0]) begin
                 tick_pending <= 1'b0;
             end
         end
     end
 
-    // 总线读数据通路
+    // 总线读数据
     always_comb begin
-        mem_rdata = 32'h0; // 默认输出 0
+        mem_rdata = 32'h0;
         if (is_read) begin
             case (offset)
-                ADDR_STATUS: mem_rdata[0] = tick_pending; // 读 bit [0] 获取状态
-                ADDR_VALUE:  mem_rdata    = sec_counter;  // (可选功能) 读当前计数值，方便仿真调试
+                ADDR_STATUS: mem_rdata[0] = tick_pending;
+                ADDR_VALUE:  mem_rdata    = sec_counter; 
                 default:     mem_rdata    = 32'h0;
             endcase
         end
