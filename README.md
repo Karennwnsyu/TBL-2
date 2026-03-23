@@ -86,10 +86,10 @@ Digits are formatted with **packed ASCII tables and index shifts** (no division/
 SoC UART parameters in the FPGA top match **115200 baud** at the **post-PLL SoC clock** (see `pynq_z2_tx_demo_top.sv`).
 
 **Expected output:**
-00:59:59   STATUS: RUNNING 
-01:00:00   STATUS: RUNNING
-01:00:01   STATUS: RUNNING
-**Our team has implemented an additional feature for the terminal UI. The time will now refresh in place instead of being printed line by line.**
+* 00:59:59   STATUS: RUNNING 
+* 01:00:00   STATUS: RUNNING
+* 01:00:01   STATUS: RUNNING
+* **Our team has implemented an additional feature for the terminal UI. The time will now refresh in place instead of being printed line by line.**
 
 ---
 
@@ -123,13 +123,13 @@ The firmware uses **ANSI escape sequences** (colors and cursor positioning) for 
 
 Our team has successfully implemented the following advanced bonus features, going beyond the baseline requirements to enhance the mission clock's functionality and operator experience:
 
-* **[x] ANSI Terminal Escape Sequences (Colored TUI & In-place Refresh):**
+* **ANSI Terminal Escape Sequences (Colored TUI & In-place Refresh):**
     The firmware utilizes ANSI escape codes to render a colored Text User Interface (TUI). This includes clearing the screen on boot, displaying a green **“RISC-V MISSION CLOCK”** title, outputting the time in **cyan** on a fixed row (in-place refresh rather than endless scrolling), and a dynamic `|/-\` spinner to indicate active polling.
-* **[x] UART Command to Set the Time:**
+* **UART Command to Set the Time:**
     We extended the UART peripheral and firmware to support RX (receive) polling. The operator can dynamically set or adjust the clock time during runtime by sending specific keystrokes or commands via the serial terminal, without needing to reset the SoC.
-* **[x] Countdown Timer Mode (T-Minus):**
+* **Countdown Timer Mode (T-Minus):**
     The system features a toggleable countdown logic. When activated, the clock counts downwards from a specified target time to `00:00:00`, accurately simulating a critical space shuttle launch sequence.
-* **[x] Mission Elapsed Time (MET) Display:**
+* **Mission Elapsed Time (MET) Display:**
     In addition to the primary local time, the terminal concurrently tracks and displays the MET (Mission Elapsed Time). This provides a continuous, independent count of the total uptime/flight time since the system was booted or the mission sequence was initiated.
 
 ---
@@ -142,11 +142,11 @@ Our team has successfully implemented the following advanced bonus features, goi
 
 ## Submission Checklist
 
-[] **uart.sv**
-[] **timer.sv**
-[] **tb_basic.sv**
-[] **firmware/** (contains **clock.c**, l**inker.ld**, **Makefile**)
-[] **clock.mem**
-[] **README.md**
-[] **report.pdf**
-[] **ai_log.txt**
+* **uart.sv**
+* **timer.sv**
+* **tb_basic.sv**
+* **firmware/** (contains **clock.c**, l**inker.ld**, **Makefile**)
+* **clock.mem**
+* **README.md**
+* **report.pdf**
+* **ai_log.txt**
