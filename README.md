@@ -71,7 +71,7 @@ Digits are formatted with **packed ASCII tables and index shifts** (no division/
    - **`rtl/picorv32.v`** (CPU core is Verilog, not SystemVerilog)
 3. Set the **simulation run directory** in Vivado to that **project root** so `IMEM_HEX("clock.mem")` and `imem`’s `$readmemh` resolve.
 4. Set top module to **`tb_basic`**.
-5. Run **xsim**. The testbench self-checks UART text for **`MISSION CLOCK`**, **`00:00:00`**, and **`00:01:00`** (minute rollover) and finishes with **PASS** or **`$fatal`**.
+5. Run **xsim**. Click: Flow Navigator -> Simulation -> Run Simulation -> Run Behavioral Simulation. The testbench self-checks UART text for **`MISSION CLOCK`**, **`00:00:00`**, and **`00:01:00`** (minute rollover) and finishes with **PASS** or **`$fatal`**.
 
 ---
 
@@ -84,6 +84,12 @@ Digits are formatted with **packed ASCII tables and index shifts** (no division/
 5. **Program** the FPGA from Vivado Hardware Manager (or your lab flow).
 
 SoC UART parameters in the FPGA top match **115200 baud** at the **post-PLL SoC clock** (see `pynq_z2_tx_demo_top.sv`).
+
+**Expected output:**
+00:59:59   STATUS: RUNNING 
+01:00:00   STATUS: RUNNING
+01:00:01   STATUS: RUNNING
+**Our team has implemented an additional feature for the terminal UI. The time will now refresh in place instead of being printed line by line.**
 
 ---
 
@@ -113,6 +119,34 @@ The firmware uses **ANSI escape sequences** (colors and cursor positioning) for 
 
 ---
 
+## Advanced Features (Bonus)
+
+Our team has successfully implemented the following advanced bonus features, going beyond the baseline requirements to enhance the mission clock's functionality and operator experience:
+
+* **[x] ANSI Terminal Escape Sequences (Colored TUI & In-place Refresh):**
+    The firmware utilizes ANSI escape codes to render a colored Text User Interface (TUI). This includes clearing the screen on boot, displaying a green **“RISC-V MISSION CLOCK”** title, outputting the time in **cyan** on a fixed row (in-place refresh rather than endless scrolling), and a dynamic `|/-\` spinner to indicate active polling.
+* **[x] UART Command to Set the Time:**
+    We extended the UART peripheral and firmware to support RX (receive) polling. The operator can dynamically set or adjust the clock time during runtime by sending specific keystrokes or commands via the serial terminal, without needing to reset the SoC.
+* **[x] Countdown Timer Mode (T-Minus):**
+    The system features a toggleable countdown logic. When activated, the clock counts downwards from a specified target time to `00:00:00`, accurately simulating a critical space shuttle launch sequence.
+* **[x] Mission Elapsed Time (MET) Display:**
+    In addition to the primary local time, the terminal concurrently tracks and displays the MET (Mission Elapsed Time). This provides a continuous, independent count of the total uptime/flight time since the system was booted or the mission sequence was initiated.
+
+---
+
 ## Note on `clock.mem` in Git
 
 `clock.mem` may be listed in **`.gitignore`** because it is generated. If submission requires it in the repository, add it with `git add -f clock.mem` after a successful build.
+
+---
+
+## Submission Checklist
+
+[] **uart.sv**
+[] **timer.sv**
+[] **tb_basic.sv**
+[] **firmware/** (contains **clock.c**, l**inker.ld**, **Makefile**)
+[] **clock.mem**
+[] **README.md**
+[] **report.pdf**
+[] **ai_log.txt**
