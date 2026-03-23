@@ -71,7 +71,7 @@ Digits are formatted with **packed ASCII tables and index shifts** (no division/
    - **`rtl/picorv32.v`** (CPU core is Verilog, not SystemVerilog)
 3. Set the **simulation run directory** in Vivado to that **project root** so `IMEM_HEX("clock.mem")` and `imem`’s `$readmemh` resolve.
 4. Set top module to **`tb_basic`**.
-5. Run **xsim**. Click: Flow Navigator -> Simulation -> Run Simulation -> Run Behavioral Simulation. The testbench self-checks UART text for **`MISSION CLOCK`**, **`00:00:00`**, and **`00:01:00`** (minute rollover) and finishes with **PASS** or **`$fatal`**.
+5. Run **xsim**. Click: Flow Navigator → Simulation → Run Simulation → Run Behavioral Simulation. The testbench self-checks UART text for **`MISSION CLOCK`**, **`00:00:00`**, and **`00:01:00`** (minute rollover) and finishes with **PASS** or **`$fatal`**.
 
 ---
 
