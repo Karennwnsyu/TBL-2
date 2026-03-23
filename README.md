@@ -13,9 +13,9 @@ Instruction memory is initialized from **`clock.mem`** (compiled firmware). Data
 | Role | Member Name | Key Responsibilities |
 | :--- | :--- | :--- |
 | **Team Leader** | `WANG Xinan SID: 58521809` | Coordinates work distribution, ensures on-time integration, and manages the final submission. |
-| **SoC Engineer** | `HE SiYu SID: 57854446` | Integrates peripherals into the RISC-V system, defines the memory map, and manages bus interconnects. |
+| **SoC Engineer** | `LIU Yutong SID: 58521441` | Integrates peripherals into the RISC-V system, defines the memory map, and manages bus interconnects. |
 | **Peripheral Engineer** | `TANG Xiwei SID: 58521705` | Implements the hardware RTL (SystemVerilog) for UART (`uart.sv`) and Timer (`timer.sv`). |
-| **Firmware Engineer** | `LIU Yutong SID: 58521441` | Develops the bare-metal C program (`clock.c`) for time updates, polling, and rollover logic. |
+| **Firmware Engineer** | `HE SiYu SID: 57854446` | Develops the bare-metal C program (`clock.c`) for time updates, polling, and rollover logic. |
 | **Verification Engineer** | `PAN YANG SID:57898744` | Develops `tb_basic.sv`, runs Vivado xsim simulations, and debugs waveform behavior. |
 | **AI Engineer** | `ZHAO Xingquan SID: 58522204` | Uses AI tools for development acceleration, audits AI-generated code, and maintains `ai_log.txt`. |
 
