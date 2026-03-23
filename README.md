@@ -16,7 +16,7 @@ Instruction memory is initialized from **`clock.mem`** (compiled firmware). Data
 | **SoC Engineer** | `HE SiYu SID: ` | Integrates peripherals into the RISC-V system, defines the memory map, and manages bus interconnects. |
 | **Peripheral Engineer** | `TANG Xiwei SID: 58521705` | Implements the hardware RTL (SystemVerilog) for UART (`uart.sv`) and Timer (`timer.sv`). |
 | **Firmware Engineer** | `LIU Yutong SID: 58521441` | Develops the bare-metal C program (`clock.c`) for time updates, polling, and rollover logic. |
-| **Verification Engineer** | `PAN YANG; SID:57898744` | Develops `tb_basic.sv`, runs Vivado xsim simulations, and debugs waveform behavior. |
+| **Verification Engineer** | `PAN YANG SID:57898744` | Develops `tb_basic.sv`, runs Vivado xsim simulations, and debugs waveform behavior. |
 | **AI Engineer** | `ZHAO Xingquan SID: 58522204` | Uses AI tools for development acceleration, audits AI-generated code, and maintains `ai_log.txt`. |
 
 ---
